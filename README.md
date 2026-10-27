@@ -52,48 +52,72 @@ Socket programming finds applications in various domains, including web developm
 3.	File Transfer Protocol: Protocols like FTP (File Transfer Protocol) utilize socket programming for transferring files between a client and a server.
 4.	Networked Games: Online multiplayer games rely on socket programming to facilitate communication between game clients and servers.
 5.	RPC mechanisms: which allow processes to execute code on a remote server, often use socket programming for communication.
-## Client:
-
-```
-import socket             
-# next create a socket object 
-s = socket.socket()         
-print ("Socket successfully created")
-port = 12345                
-s.bind(('127.0.0.1', port))         
-print ("socket binded to %s" %(port)) 
-s.listen(5)     
-print ("socket is listening")            
-while True: 
-    c, addr = s.accept()     
-    print ('Got connection from', addr )
-    c.send('Thank you for connecting'.encode()) 
-  # Close the connection with the client 
-c.close()
-```
-
 ## Server:
 
 ```
-# Import socket module 
-import socket             
+import socket
 
-# Create a socket object 
-s = socket.socket()         
+# Create socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Define the port on which you want to connect 
-port = 12345                
+# Bind socket to IP and port
+host = '127.0.0.1'
+port = 12345
+server_socket.bind((host, port))
 
-# connect to the server on local computer 
-s.connect(('127.0.0.1', port)) 
+# Listen for connections
+server_socket.listen(1)
+print("Server is waiting for connection...")
 
-# receive data from the server and decoding to get the string.
-print (s.recv(1024).decode())
-# close the connection 
-s.close()
+# Accept client connection
+conn, addr = server_socket.accept()
+print("Connected to:", addr)
+
+# Receive data from client
+data = conn.recv(1024).decode()
+print("Client says:", data)
+
+# Send response to client
+message = "Hello Client, message received!"
+conn.send(message.encode())
+
+# Close connection
+conn.close()
+server_socket.close()
+```
+
+## Client:
+
+```
+import socket
+
+# Create socket
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Connect to server
+host = '127.0.0.1'
+port = 12345
+client_socket.connect((host, port))
+
+# Send message to server
+message = "Hello Server!"
+client_socket.send(message.encode())
+
+# Receive response from server
+data = client_socket.recv(1024).decode()
+print("Server says:", data)
+
+# Close socket
+client_socket.close()
 ```
 ## Output:
-![Screenshot 2026-01-02](https://github.com/user-attachments/assets/33561cb6-84aa-48b9-aa06-461b0cd4785a)
+
+## Simpleserver.py:
+<img width="1088" height="235" alt="image" src="https://github.com/user-attachments/assets/6407eaf8-c91f-4886-803f-a7fcf70a54a5" />
+
+## Simpleclient.py:
+<img width="1437" height="182" alt="image" src="https://github.com/user-attachments/assets/d2069434-3e29-4a78-bc51-a944aead5052" />
+
 
 ## Result:
-Thus the study of Socket Programming Completed Successfully
+Thus the study of Socket Programming Completed Successfully.
